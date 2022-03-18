@@ -4,7 +4,7 @@ const electronReload = require('electron-reload')(__dirname)
 
 app.on("ready", () => {
   const mainWindow = new BrowserWindow({
-    width: 190,
+    width: 230,
     height: 120,
     resizable: false,
   });
