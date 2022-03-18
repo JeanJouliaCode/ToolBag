@@ -9,6 +9,8 @@ app.on("ready", () => {
     resizable: false,
   });
 
+  mainWindow.removeMenu()
+
   mainWindow.loadFile(path.join(__dirname, "public/index.html"));
   mainWindow.webContents.openDevTools();
 });
