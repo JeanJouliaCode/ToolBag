@@ -1,5 +1,12 @@
 <script>
+  const { ipcRenderer } = require("electron");
   let speed = 50;
+  let bool = true;
+
+  ipcRenderer.on("triggerCommand", () => {
+    bool = !bool;
+    console.log(bool);
+  });
 </script>
 
 <main>
