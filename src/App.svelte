@@ -1,21 +1,33 @@
 <script>
   const { ipcRenderer } = require("electron");
   let speed = 50;
-  let bool = true;
+  let autoClickActive = false;
+  const autoClickOptions = ["F1", "CommandOrControl+F1"];
+
+  const handleChange = (e) => {
+    ipcRenderer.send("command", e.target.value);
+    console.log(e.target.value);
+  };
 
   ipcRenderer.on("triggerCommand", () => {
-    bool = !bool;
-    console.log(bool);
+    autoClickActive = !autoClickActive;
+    console.log(autoClickActive);
   });
 </script>
 
 <main>
-  <h1 class="test__title">Configuration</h1>
+  <header class="header">
+    <h1 class="test__title">Configuration</h1>
+    <span>{autoClickActive ? "⚠️active" : ""}</span>
+  </header>
+
   <div class="action-container">
     <div class="row1">
       <label for="trigger">Trigger key:</label>
-      <select name="trigger key" id="trigger">
-        <option value="F12">F12</option>
+      <select name="trigger key" id="trigger" on:change={handleChange}>
+        {#each autoClickOptions as option}
+          <option value={option}>{option}</option>
+        {/each}
       </select>
     </div>
     <div class="row2">
@@ -43,6 +55,11 @@
 
     display: flex;
     flex-direction: column;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
   }
 
   .action-container {

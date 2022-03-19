@@ -1,8 +1,11 @@
-const { app, BrowserWindow, globalShortcut } = require("electron");
+const { app, BrowserWindow, globalShortcut, ipcMain } = require("electron");
 const path = require("path");
+const electronReload = require('electron-reload')(__dirname)
+
+let mainWindow = null;
 
 app.on("ready", () => {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 230,
     height: 120,
     resizable: false,
@@ -13,19 +16,27 @@ app.on("ready", () => {
     }
   });
 
-  mainWindow.removeMenu()
-
+  mainWindow.removeMenu() //remove default menu under title bar
   mainWindow.loadFile(path.join(__dirname, "public/index.html"));
-  mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();//open devtool on launch
 
-  const ret = globalShortcut.register('CommandOrControl+F1', () => {
+  changeCommandRegistered('F1') // set the default trigger key to F1 for auto clicker
+
+  ipcMain.on('command', (event, arg) => {
+    changeCommandRegistered(arg)
+    return
+  })
+});
+
+function changeCommandRegistered(commandToRegister) {
+  globalShortcut.unregisterAll()
+  const ret = globalShortcut.register(commandToRegister, () => {
     mainWindow.webContents.send("triggerCommand")
   })
-
   if (!ret) {
     console.log('registration failed')
   }
-});
+}
 
 app.on('will-quit', () => {
   globalShortcut.unregisterAll()
