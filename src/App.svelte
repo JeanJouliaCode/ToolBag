@@ -1,7 +1,12 @@
 <script>
   const { ipcRenderer } = require("electron");
-  let speed = 50;
+  const { mouse, Button } = require("@nut-tree/nut-js");
+
+  let speed = 200;
+  mouse.config.autoDelayMs = 100;
   let autoClickActive = false;
+  let interval = null;
+
   const autoClickOptions = ["F1", "CommandOrControl+F1"];
 
   const handleChange = (e) => {
@@ -11,7 +16,14 @@
 
   ipcRenderer.on("triggerCommand", () => {
     autoClickActive = !autoClickActive;
-    console.log(autoClickActive);
+
+    if (autoClickActive) {
+      interval = setInterval(() => {
+        mouse.leftClick();
+      }, speed);
+    } else {
+      clearInterval(interval);
+    }
   });
 </script>
 

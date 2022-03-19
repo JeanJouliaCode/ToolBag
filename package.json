@@ -6,7 +6,8 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "electron ."
+    "start": "electron .",
+    "build-exe": "npx electron-packager ./ ToolBag --platform=win32 --arch=x64"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
@@ -21,6 +22,8 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "@nut-tree/nut-js": "^2.0.1",
+    "electron-packager": "^15.4.0",
     "electron-reload": "^2.0.0-alpha.1",
     "node-sass": "^7.0.1",
     "sirv-cli": "^2.0.0",
